@@ -1,7 +1,7 @@
 name: "NetEase Cloud Music API"
 version: "4.41.1"
 slug: "netease_cloud_music_api"
-description: "NeteaseCloudMusicApiEnhanced 的 Home Assistant 薄封装，供 Music Assistant 使用（锁定 4.41.1）。"
+description: "NeteaseCloudMusicApiEnhanced 的 HAOS 薄封装，可作为HAOS的应用（add-on）安装。"
 url: "https://github.com/Square-N/netease-api-addon/tree/main/netease_cloud_music_api"
 arch:
   - amd64
