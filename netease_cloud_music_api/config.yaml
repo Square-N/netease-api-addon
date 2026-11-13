@@ -1,0 +1,21 @@
+name: "NetEase Cloud Music API"
+version: "4.41.1"
+slug: "netease_cloud_music_api"
+description: "NeteaseCloudMusicApiEnhanced for Music Assistant — a pinned, self-contained NetEase API add-on."
+url: "https://github.com/Square-N/netease-api-addon/tree/main/netease_cloud_music_api"
+arch:
+  - amd64
+  - aarch64
+init: false
+startup: services
+boot: auto
+timeout: 30
+ports:
+  3000/tcp: 3000
+ports_description:
+  3000/tcp: "NetEase Cloud Music API HTTP"
+environment:
+  PORT: "3000"
+  TZ: "Asia/Shanghai"
+tmpfs: true
+watchdog: "http://[HOST]:[PORT:3000]/inner/version"
