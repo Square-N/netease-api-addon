@@ -1,58 +1,79 @@
 # NetEase Cloud Music API add-on
 
-This add-on wraps the official multi-architecture Docker image of
-[NeteaseCloudMusicApiEnhanced](https://github.com/NeteaseCloudMusicApiEnhanced/api-enhanced)
-for use with Music Assistant.
+本 add-on 封装 [NeteaseCloudMusicApiEnhanced](https://github.com/NeteaseCloudMusicApiEnhanced/api-enhanced)
+的官方多架构 Docker 镜像，供 Music Assistant 使用。
 
-- Upstream release: **4.41.1** (pinned)
-- Container port: `3000`
-- Host port: `3000` by default
-- No persistent data: anonymous token and keys live in `/tmp` and are rebuilt on start
+- 上游 release：**4.41.1**（已锁定）
+- 容器端口：`3000`
+- 主机端口：默认 `3000`
+- 无持久化数据：匿名 token 和密钥存放在 `/tmp`，启动时自动重建
 
-## Why a wrapper
+## 为什么只做薄封装
 
-The upstream project already publishes a clean Node.js Docker image. This
-repository only adds the Home Assistant add-on metadata, so there is no
-business logic fork to maintain. Updating is a two-line change:
+上游已经提供干净的 Node.js Docker 镜像。本仓库只补充 Home Assistant add-on 元数据，
+不 fork 上游业务代码，减少后续维护成本。升级时只需改两处：
 
-1. `config.yaml`: bump `version`
-2. `Dockerfile`: bump `ARG UPSTREAM_IMAGE`
+1. `config.yaml`：`version`
+2. `Dockerfile`：`ARG UPSTREAM_IMAGE`
 
-## Install
+## 安装
 
-1. Add this repository to Home Assistant:
-   **Settings → Add-ons → Add-on store → ⋮ → Repositories**
-   URL: `https://github.com/Square-N/netease-api-addon`
-2. Install **NetEase Cloud Music API**.
-3. Start it.
-4. Verify:
+1. 在 Home Assistant 添加本仓库：
+   **设置 → 加载项 → 加载项商店 → ⋮ → 仓库**
+   填写：
+
+   ```text
+   https://github.com/Square-N/netease-api-addon
+   ```
+
+2. 安装 **NetEase Cloud Music API**。
+3. 启动后验证：
+
    ```bash
    curl http://<HA_HOST>:3000/inner/version
    ```
-   Expected: `{"code":200,"data":{"version":"4.41.1"}}`
+
+   预期返回：`{"code":200,"data":{"version":"4.41.1"}}`
 
 ## Music Assistant
 
-In Music Assistant, set the NetEase provider **API base URL** to:
+在 Music Assistant 中，把网易云 provider 的 **API base URL** 设为：
 
 ```text
 http://<HA_HOST>:3000
 ```
 
-If you temporarily map the host port to `3001` while testing, use `3001`
-instead.
+如果测试时临时映射到 `3001`，则先填 `3001`，验证后再切回 `3000`。
 
-## Port conflict
+## 端口冲突
 
-If the old NetEase API add-on is still running on port `3000`, either:
+旧版 `NetEase Cloud Music API` add-on 默认占用 `3000`。可以：
 
-- stop the old add-on first, or
-- change this add-on's host port to `3001` in the add-on **Network** tab,
-  test it, then switch it back to `3000` after stopping the old add-on.
+- 先停止旧 add-on，再启动本 add-on；或
+- 在 add-on 的 **网络** 标签里把本 add-on 临时映射到 `3001`，验证通过后切回 `3000`。
 
-## Update policy
+## 更新策略
 
-This repository pins an upstream **release tag**, not `latest`. Bump the
-version deliberately after checking the upstream release notes. Do not use
-`latest`: Home Assistant uses the add-on `version` for update detection,
-and a moving tag makes rollback and bug reports ambiguous.
+本仓库锁定上游 **release tag**，不使用 `latest`。升级时只改：
+
+- `config.yaml` 的 `version`
+- `Dockerfile` 的 `ARG UPSTREAM_IMAGE`
+
+然后 commit + push。不配置自动更新，升级由人工确认。
+
+## 已知提示
+
+启动日志中可能出现上游的非致命警告：
+
+- `xeapi public key is missing`
+- `zstd` 解压相关错误
+
+目前不影响基础接口和播放；如果后续高级接口异常，再排查。
+
+## Vibe Coding 说明
+
+> **本 add-on 是 Vibe Coding 产物。**
+>
+> 封装、配置与文档由 AI 生成并经人工确认；所用模型为 **ds4.1flash（max 档）**。
+>
+> 已在真实 HAOS 环境完成安装、接口检查和试播验证；生产使用前建议自行复核。

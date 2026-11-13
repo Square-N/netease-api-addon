@@ -8,10 +8,9 @@ LABEL io.hass.type="addon" \
       io.hass.version="${BUILD_VERSION}" \
       io.hass.arch="${BUILD_ARCH}"
 
-# The upstream image already:
-# - runs as the non-root `node` user
-# - listens on PORT (default 3000)
-# - uses tini as PID 1 and `node app.js` as its command
+# 上游镜像已经具备：
+# - 以非 root 的 `node` 用户运行
+# - 监听 PORT（默认 3000）
+# - 用 tini 作为 PID 1，命令为 `node app.js`
 #
-# Keep this wrapper intentionally thin. The add-on version and the upstream
-# image tag in config.yaml / UPSTREAM_IMAGE must stay in sync.
+# 这里刻意保持薄封装。config.yaml 的 version 与 UPSTREAM_IMAGE 的 tag 必须同步。
