@@ -16,7 +16,7 @@ repository only adds the Home Assistant add-on metadata, so there is no
 business logic fork to maintain. Updating is a two-line change:
 
 1. `config.yaml`: bump `version`
-2. `Dockerfile`: bump `ARG BUILD_FROM`
+2. `Dockerfile`: bump `ARG UPSTREAM_IMAGE`
 
 ## Install
 
